@@ -1,0 +1,112 @@
+/*                               Sound Mashup Number 3
+                        by Ben Josefson and Ben Norton
+                                    2/27/18
+ 
+  */
+
+import java.util.Scanner;
+import java.util.*;
+
+public class MashupIII {
+
+            
+      public static void main (String [] args) {
+       
+        Scanner kb = new Scanner(System.in);
+        Sound[] clips;        //Array to hold sound clips
+        clips = new Sound[100];
+        int lsize= 0;        // Logical size of array
+        
+  new LLSoundList();
+        
+        System.out.print("Enter A to Append, I to Insert, D to Delete, P to Play, L to List or Q to quit");       
+        char command = Character.toUpperCase(kb.next().charAt(0)); //Allows for choice of method
+        
+        while (command != 'Q'){
+          switch (command)
+          {
+            case 'A': 
+              System.out.println("Please provide the file of the clip you would like to append.");
+             String tempA= FileChooser.pickAFile(); // Creates filepath for file
+              Sound tempsoundA= new Sound(tempA);    //Temporary Sound
+              
+                      System.out.println("Would you like to reverse the sound? 'Y' for Yes 'N' for No:");
+                      char answer = Character.toUpperCase(kb.next().charAt(0)); //Reverse Answer
+                          if (answer == 'Y'){
+                              tempsoundA=tempsoundA.reverse();
+                          }
+                      
+                      System.out.println("Would you like to Scale the sound? 'Y' for Yes 'N' for No:");
+                      char answer2 = Character.toUpperCase(kb.next().charAt(0)); //Scale Answer
+                      if (answer2 == 'Y'){ 
+                              System.out.println("By how much would you like to scale the sound by?");
+                                 double scaleA = kb.nextDouble();   //Amount to scale sound by
+                                 tempsoundA=tempsoundA.scale(scaleA);
+                      }
+                                 
+                      
+                     SoundArray.Append(clips, tempsoundA);
+                      lsize++;
+                          
+                    
+                    break;
+            case 'I': 
+                 SoundArray.List(clips);
+                 
+                      System.out.println("Please enter the position you would like your sound to occupy.");
+                       int insertplace=(kb.nextInt())-1; //Where the user wants to insert the new sound
+          
+                        System.out.println("Please provide the filename of the clip you would like to insert.");
+                        String tempI= FileChooser.pickAFile(); // Creates filepath for file
+                        Sound tempsoundI= new Sound(tempI);    //Temporary Sound
+              
+                      System.out.println("Would you like to reverse the sound? 'Y' for Yes 'N' for No:");
+                      char answer3 = Character.toUpperCase(kb.next().charAt(0));// Reverse Answer
+                          if (answer3 == 'Y'){
+                             tempsoundI.reverse();
+                      }
+                      
+                      System.out.println("Would you like to Scale the sound? 'Y' for Yes 'N' for No:");
+                      char answer4 = Character.toUpperCase(kb.next().charAt(0)); // Scale answer
+                      if (answer4 == 'Y'){ 
+                              System.out.println("By how much would you like to scale the sound by?");
+                                 double scaleI = kb.nextDouble(); // Amount to scale clip by
+                                 tempsoundI.scale(scaleI);
+                      }
+          
+                      
+                    while( ! SoundArray.Insert(clips, tempsoundI, insertplace));
+                    lsize++;
+                    System.out.println("Here is your edited list.");
+                    SoundArray.List(clips);
+                   break;
+            case 'D': 
+              SoundArray.List(clips);
+                   System.out.println("Which clip would you like to delete?");
+                       int deleteplace=(kb.nextInt())-1;
+                     
+     
+                    while( ! SoundArray.Delete(clips, deleteplace));
+                   
+                        lsize--;
+                        
+                    System.out.println("Here is your edited list.");
+                    SoundArray.List(clips);
+                    break;
+            case 'P': 
+              System.out.println("How much of a delay would you like between clips?(Milliseconds)");
+              int delaybtwn=kb.nextInt(); //Time between clips
+                    SoundArray.Play(clips, delaybtwn);
+                    break;
+            default: 
+              System.out.println("Please enter one of the specified values.");
+          
+            case 'L':
+              SoundArray.List(clips);
+              break;
+          }
+          System.out.println("Enter A to Append, I to Insert, D to Delete, P to Play, L to List or Q to quit");
+          command = Character.toUpperCase(kb.next().charAt(0));
+        }
+      }
+}
